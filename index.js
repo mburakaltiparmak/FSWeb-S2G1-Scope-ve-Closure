@@ -18,7 +18,14 @@
 function ilkiniDon(stringArray, callback) {
   return callback(stringArray[0])
 }
-console.log('örnek görev:', ilkiniDon(['as','sa'],function(metin){return metin+metin}));
+//console.log(
+  "örnek görev:",
+  ilkiniDon(['as','sa'],function(metin)
+  {
+    return metin+metin
+  }
+  )
+ // );
 
 // Başlangıç Challenge'ı Sonu
 
@@ -30,10 +37,12 @@ console.log('örnek görev:', ilkiniDon(['as','sa'],function(metin){return metin
   Aşağıdaki skor1 ve skor2 kodlarını inceleyiniz ve aşağıdaki soruları altına not alarak cevaplayın
   
   1. skor1 ve skor2 arasındaki fark nedir?
-  
+  skor1'in olduğu kodlarda skorGuncelle fonksiyonuna function closure'ı sonrasında istediğimiz kadar değişkenle çalıştırabilir ve değişkenleri her çağırdığımızda bir diğerinden bağımsız olarak skor değerini artırabiliriz. 
+  ancak, skor2'nin kodlarında function olarak tanımlanan skor2 olduğu için başka bir skor için (ör.skor3 olsun) yeni bir fonksiyon tanımlamamız gerekir. buna rağmen; "skor" değişkeni skor1'deki gibi bağımsız değil, kümülatif olarak artacaktır.
   2. Hangisi bir closure kullanmaktadır? Nasıl tarif edebilirsin? (yarınki derste öğreneceksin :) )
-  
+  skor1, parent ve child closure kullanmaktadır. skor2, kodu sadece parent closure'dan oluşmaktadır.
   3. Hangi durumda skor1 tercih edilebilir? Hangi durumda skor2 daha mantıklıdır?
+  Kümülatif artış istenmesi durumunda skor2 ; Birbirlerinden bağımsız olarak artış istenmesi durumunda skor1 tercih edilmelidir.
 */
 
 // skor1 kodları
@@ -64,10 +73,11 @@ Aşağıdaki takimSkoru() fonksiyonununda aşağıdakileri yapınız:
 Not: Bu fonskiyon, aşağıdaki diğer görevler için de bir callback fonksiyonu olarak da kullanılacak
 */
 
-function takimSkoru(/*Kodunuzu buraya yazınız*/){
-    /*Kodunuzu buraya yazınız*/
+function takimSkoru(){
+let  skor = Math.floor(Math.random() * (25-10) + 10);
+    return skor;
 }
-
+//console.log(takimSkoru());
 
 
 
@@ -86,9 +96,24 @@ Aşağıdaki macSonucu() fonksiyonununda aşağıdakileri yapınız:
 }
 */ 
 
-function macSonucu(/*Kodunuzu buraya yazınız*/){
-  /*Kodunuzu buraya yazınız*/
-}
+function macSonucu(takimSkoru,periyot){
+    let home = 0 ;
+    let konuk = 0; 
+    for (let i=1 ; i<=periyot ; i++){
+      home += takimSkoru();
+      konuk += takimSkoru();
+
+      }
+   return {
+    "EvSahibi": home,
+    "KonukTakim": konuk
+
+  }
+  
+}      
+//console.log(macSonucu(takimSkoru, 4))
+  
+
 
 
 
@@ -109,10 +134,13 @@ Aşağıdaki periyotSkoru() fonksiyonununda aşağıdakileri yapınız:
   */
 
 
-function periyotSkoru(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
-
-}
+function periyotSkoru(takimSkoru) {
+let yeniskor = {
+  "EvSahibi" : takimSkoru() ,
+  "KonukTakim" : takimSkoru() }
+  return yeniskor;    
+} 
+//console.log (periyotSkoru(takimSkoru));
 
 
 /* Zorlayıcı Görev 5: skorTabelasi() 
@@ -146,10 +174,25 @@ MAÇ UZAR ise skorTabelasi(periyotSkoru,takimSkoru,4)
 ] */
 // NOTE: Bununla ilgili bir test yoktur. Eğer logladığınız sonuçlar yukarıdakine benziyor ise tmamlandı sayabilirsiniz.
 
-function skorTabelasi(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
-}
+function skorTabelasi(periyotSkoru,takimSkoru,periyot) {
+  let skorArray= [];
+  let macSkoru = {
+    home : 0,
+    konuk : 0
+  }
+   for (let i=1 ; i<=periyot ; i++){
+    let ceyrekskoru = periyotSkoru(takimSkoru);
+    let metin = `${i}. Periyot: Ev Sahibi ${ceyrekskoru.home}  - Konuk Takım ${ceyrekskoru.konuk} `;
+    skorArray.push(metin);
+    macSkoru.home += ceyrekskoru.home;
+    macSkoru.konuk += ceyrekskoru.konuk;
+   }
+   let metin = `Maç Sonucu: Ev Sahibi ${macSkoru.home} - Konuk Takım ${macSkoru.konuk}`;
+   skorArray.push(metin);
+    return skorArray
 
+}
+console.log(skorTabelasi(periyotSkoru,takimSkoru,4));
 
 
 
